@@ -2,6 +2,7 @@ package lauragallace.BEW7D5p.services;
 
 import lauragallace.BEW7D5p.entities.User;
 import lauragallace.BEW7D5p.exceptions.NotFoundException;
+import lauragallace.BEW7D5p.payloads.UserDTO;
 import lauragallace.BEW7D5p.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,4 +30,23 @@ public class UserService {
     }
 
 
+    public User findByIdAndUpdate(long id, UserDTO body) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        user.setEmail(body.email());
+        user.setName(body.name());
+        user.setSurname(body.surname());
+        return userRepository.save(user);
+    }
+
+    public User setAdmin(long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        user.setRole("ADMIN");
+        return userRepository.save(user);
+    }
+
+    public User setUser(long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        user.setRole("USER");
+        return userRepository.save(user);
+    }
 }
